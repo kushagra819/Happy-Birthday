@@ -1,44 +1,30 @@
-class Paper {
-  constructor() {
-    this.holdingPaper = false;
-    this.mouseTouchX = 0;
-    this.mouseTouchY = 0;
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.prevMouseX = 0;
-    this.prevMouseY = 0;
-    this.velX = 0;
-    this.velY = 0;
-    this.rotation = Math.random() * 30 - 15;
-    this.currentPaperX = 0;
-    this.currentPaperY = 0;
-    this.rotating = false;
-  }
+let highestZ = 1;
 
+class Paper {
+  holdingPaper = false;
+  touchStartX = 0;
+  touchStartY = 0;
+  touchMoveX = 0;
+  touchMoveY = 0;
+  rotation = 0;
   init(paper) {
     paper.addEventListener('touchstart', (e) => {
       e.preventDefault();
       const touch = e.touches[0];
-      this.mouseTouchX = touch.clientX;
-      this.mouseTouchY = touch.clientY;
-      this.prevMouseX = touch.clientX;
-      this.prevMouseY = touch.clientY;
       this.holdingPaper = true;
+      this.touchStartX = touch.clientX;
+      this.touchStartY = touch.clientY;
     });
 
     paper.addEventListener('touchmove', (e) => {
       e.preventDefault();
       if (this.holdingPaper) {
         const touch = e.touches[0];
-        this.mouseX = touch.clientX;
-        this.mouseY = touch.clientY;
-        this.velX = this.mouseX - this.prevMouseX;
-        this.velY = this.mouseY - this.prevMouseY;
-        this.currentPaperX += this.velX;
-        this.currentPaperY += this.velY;
-        this.prevMouseX = this.mouseX;
-        this.prevMouseY = this.mouseY;
-        paper.style.transform = translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg);
+        const deltaX = touch.clientX - this.touchStartX;
+        const deltaY = touch.clientY - this.touchStartY;
+        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        this.rotation = angle;
+        paper.style.transform = translate(${deltaX}px, ${deltaY}px) rotate(${this.rotation}deg);
       }
     });
 
@@ -52,4 +38,4 @@ const papers = document.querySelectorAll('.paper');
 papers.forEach(paper => {
   const p = new Paper();
   p.init(paper);
-});
+}); 
