@@ -18,6 +18,7 @@ class Paper {
   init(paper) {
     document.addEventListener('touchmove', (e) => {
       e.preventDefault(); // Prevent scrolling
+      e.stopPropagation(); // Stop event propagation
       const touch = e.touches[0];
       if (!this.rotating) {
         this.touchMoveX = touch.clientX;
@@ -49,6 +50,7 @@ class Paper {
 
     paper.addEventListener('touchstart', (e) => {
       e.preventDefault(); // Prevent scrolling
+      e.stopPropagation(); // Stop event propagation
       const touch = e.touches[0];
       if (this.holdingPaper) return;
       this.holdingPaper = true;
@@ -65,6 +67,7 @@ class Paper {
 
     window.addEventListener('touchend', (e) => {
       e.preventDefault(); // Prevent scrolling
+      e.stopPropagation(); // Stop event propagation
       this.holdingPaper = false;
       this.rotating = false;
     });
