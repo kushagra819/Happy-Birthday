@@ -48,6 +48,7 @@ class Paper {
     });
 
     paper.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // Prevent scrolling
       const touch = e.touches[0];
       if (this.holdingPaper) return;
       this.holdingPaper = true;
@@ -62,7 +63,8 @@ class Paper {
       }
     });
 
-    window.addEventListener('touchend', () => {
+    window.addEventListener('touchend', (e) => {
+      e.preventDefault(); // Prevent scrolling
       this.holdingPaper = false;
       this.rotating = false;
     });
