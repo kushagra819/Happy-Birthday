@@ -4,27 +4,22 @@ class Paper {
   holdingPaper = false;
   touchStartX = 0;
   touchStartY = 0;
-  touchMoveX = 0;
-  touchMoveY = 0;
-  rotation = 0;
   init(paper) {
     paper.addEventListener('touchstart', (e) => {
       e.preventDefault();
       const touch = e.touches[0];
       this.holdingPaper = true;
-      this.touchStartX = touch.clientX;
-      this.touchStartY = touch.clientY;
+      this.touchStartX = touch.clientX - paper.getBoundingClientRect().left;
+      this.touchStartY = touch.clientY - paper.getBoundingClientRect().top;
     });
 
     paper.addEventListener('touchmove', (e) => {
       e.preventDefault();
       if (this.holdingPaper) {
         const touch = e.touches[0];
-        const deltaX = touch.clientX - this.touchStartX;
-        const deltaY = touch.clientY - this.touchStartY;
-        const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-        this.rotation = angle;
-        paper.style.transform = translate(${deltaX}px, ${deltaY}px) rotate(${this.rotation}deg);
+        const deltaX = touch.clientX - paper.getBoundingClientRect().left - this.touchStartX;
+        const deltaY = touch.clientY - paper.getBoundingClientRect().top - this.touchStartY;
+        paper.style.transform = translate(${deltaX}px, ${deltaY}px);
       }
     });
 
@@ -38,4 +33,4 @@ const papers = document.querySelectorAll('.paper');
 papers.forEach(paper => {
   const p = new Paper();
   p.init(paper);
-}); 
+});
